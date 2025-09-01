@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Riepilogo Convocazione - FIESOLE CALCIO</title>
+<link rel="stylesheet" href="style.css">
+<style>
+body { 
+    background-color: #d9f0d6; 
+    font-family: Arial, sans-serif; 
+    margin: 0; 
+    padding: 0; 
+}
+
+header { 
+    background-color: #2ecc71; 
+    color: white; 
+    padding: 20px; 
+    text-align: center; 
+    border-bottom: 3px solid #27ae60; 
+}
+
+.container { 
+    max-width: 800px; 
+    margin: 30px auto; 
+    padding: 20px; 
+    background-color: #fff; 
+    border-radius: 12px; 
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
+    border: 2px solid #f1c40f;
+}
+
+#giocatoriTable { 
+    width: 100%; 
+    border-collapse: collapse; 
+    margin-top: 15px; 
+}
+
+#giocatoriTable th, #giocatoriTable td { 
+    border: 1px solid #ccc; 
+    padding: 8px 12px; 
+    text-align: center; 
+}
+
+#giocatoriTable th { 
+    background-color: #2ecc71; 
+    color: #fff; 
+}
+
+button { 
+    background-color: #2ecc71; 
+    color: white; 
+    border: none; 
+    padding: 10px 25px; 
+    margin: 10px 5px 0 5px; 
+    border-radius: 8px; 
+    cursor: pointer; 
+    font-size: 15px; 
+    transition: background 0.3s; 
+}
+
+button:hover { 
+    background-color: #27ae60; 
+}
+</style>
+</head>
+<body>
+<header>
+    <h1 style="color: white;">Riepilogo Convocazione</h1>
+</header>
+
+<div class="container">
+    <p><strong>Data Partita:</strong> <span id="dataConv"></span></p>
+    <p><strong>Orario Convocazione:</strong> <span id="orarioConv"></span></p>
+    <p><strong>Orario Partita:</strong> <span id="orarioPart"></span></p>
+    <p><strong>Luogo:</strong> <span id="luogo"></span></p>
+    <p><strong>Indirizzo:</strong> <span id="indirizzo"></span></p>
+    <p><strong>Squadra Avversaria:</strong> <span id="squadraAvversaria"></span></p>
+
+    <h3>Giocatori Convocati</h3>
+    <table id="giocatoriTable">
+        <thead>
+            <tr>
+                <th>Convocato</th>
+                <th>Nome</th>
+                <th>Cognome</th>
+                <th>Ruolo</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <div style="text-align:center;">
+        <button id="indietroBtn">INDIETRO</button>
+        <button id="tornaHomeBtn">SALVA E TORNA ALLA HOME</button>
+    </div>
+</div>
+
+<script>
+const convocazione = JSON.parse(localStorage.getItem('convocazioneSalvata') || '{}');
+
+document.getElementById('dataConv').textContent = convocazione.data || '';
+document.getElementById('orarioConv').textContent = convocazione.orarioConv || '';
+document.getElementById('orarioPart').textContent = convocazione.orarioPart || '';
+document.getElementById('luogo').textContent = convocazione.luogo || '';
+document.getElementById('indirizzo').textContent = convocazione.viaCampo || '';
+document.getElementById('squadraAvversaria').textContent = convocazione.squadraAvversaria || '';
+
+const tbody = document.querySelector('#giocatoriTable tbody');
+if(convocazione.giocatori && convocazione.giocatori.length > 0){
+    const convocati = convocazione.giocatori.filter(g => g.convocato);
+    if(convocati.length > 0){
+        convocati.forEach(g => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `<td>✔️</td><td>${g.nome}</td><td>${g.cognome}</td><td>${g.ruolo || ''}</td>`;
+            tbody.appendChild(tr);
+        });
+    } else {
+        tbody.innerHTML = '<tr><td colspan="4">Nessun giocatore convocato</td></tr>';
+    }
+} else {
+    tbody.innerHTML = '<tr><td colspan="4">Nessun giocatore convocato</td></tr>';
+}
+
+document.getElementById('indietroBtn').addEventListener('click', () => {
+    window.location.href = 'creaconvocazione.html';
+});
+document.getElementById('tornaHomeBtn').addEventListener('click', () => {
+    localStorage.setItem('ultimaConvocazione', JSON.stringify(convocazione));
+    window.location.href = 'index.html';
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scarica Convocazioni - FIESOLE CALCIO</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
+body {
+    background-color: #d9f0d6;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #2ecc71;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    border-bottom: 3px solid #27ae60;
+}
+
+.container {
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 12px;
+    border: 2px solid #f1c40f; /* bordo giallo */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+#riepilogoDiv {
+    white-space: pre-wrap;
+    border: 1px solid #ccc;
+    padding: 15px;
+    background-color: #f8f8f8;
+    margin-bottom: 15px;
+    border-radius: 8px;
+}
+
+button {
+    background-color: #2ecc71;
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    margin: 5px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background-color: #27ae60;
+}
+</style>
+</head>
+<body>
+<header>
+    <h1 style="color:white;">Scarica Convocazioni</h1>
+</header>
+
+<div class="container">
+    <h2>Riepilogo convocazione</h2>
+    <div id="riepilogoDiv">Nessuna convocazione salvata.</div>
+    <div style="text-align:center;">
+        <button id="pdfBtn">Esporta PDF</button>
+        <button id="txtBtn">Esporta TXT</button>
+        <button id="homeBtn">Home</button>
+    </div>
+</div>
+
+<script>
+const riepilogoDiv = document.getElementById('riepilogoDiv');
+const convocazione = JSON.parse(localStorage.getItem('convocazioneSalvata') || '{}');
+
+function mostraRiepilogo() {
+    if(!convocazione.data){
+        riepilogoDiv.textContent = 'Nessuna convocazione salvata.';
+        return;
+    }
+
+    let testo = `DATA: ${convocazione.data}\n`;
+    testo += `ORARIO CONVOCAZIONE: ${convocazione.orarioConv}\n`;
+    testo += `ORARIO PARTITA: ${convocazione.orarioPart}\n`;
+    testo += `LUOGO: ${convocazione.luogo}\n`;
+    testo += `Indirizzo: ${convocazione.viaCampo}\n`;
+    testo += `Squadra avversaria: ${convocazione.squadraAvversaria}\n\n`;
+    testo += 'Giocatori convocati:\n';
+    
+    convocazione.giocatori.forEach(g => {
+        if(g.convocato){
+            testo += `${g.cognome} ${g.nome}\n`;
+        }
+    });
+
+    riepilogoDiv.textContent = testo;
+}
+mostraRiepilogo();
+
+// Formato italiano per i nomi file
+function formatoItaliano(dataStr) {
+    const parti = dataStr.split('-');
+    if(parti.length !== 3) return dataStr;
+    return `${parti[2]}-${parti[1]}-${parti[0]}`;
+}
+
+// PDF
+document.getElementById('pdfBtn').addEventListener('click', () => {
+    if(!convocazione.data){
+        alert('Nessuna convocazione da esportare!');
+        return;
+    }
+
+    const element = document.createElement('pre');
+    element.style.fontFamily = 'Arial, sans-serif';
+    element.style.fontSize = '12pt';
+    element.style.padding = '10px';
+    element.style.whiteSpace = 'pre-wrap';
+    element.textContent = riepilogoDiv.textContent;
+
+    const nomeFile = `convocazione_${formatoItaliano(convocazione.data)}.pdf`;
+
+    html2pdf().from(element).set({
+        margin: 10,
+        filename: nomeFile,
+        html2canvas: {scale: 2},
+        jsPDF: {unit: 'mm', format: 'a4', orientation: 'portrait'}
+    }).save();
+});
+
+// TXT (con ruolo)
+document.getElementById('txtBtn').addEventListener('click', () => {
+    if(!convocazione.data){
+        alert('Nessuna convocazione da esportare!');
+        return;
+    }
+    const txt = convocazione.giocatori
+        .filter(g => g.convocato)
+        .map(g => `${g.cognome},${g.nome},${g.ruolo}`)
+        .join('\n');
+
+    const nomeFile = `convocazione_${formatoItaliano(convocazione.data)}.txt`;
+
+    const blob = new Blob([txt], {type: 'text/plain'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = nomeFile;
+    a.click();
+});
+
+// Tasto Home
+document.getElementById('homeBtn').addEventListener('click', () => {
+    window.location.href = 'index.html';
+});
+</script>
+</body>
+</html>

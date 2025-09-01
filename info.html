@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Info - FIESOLE CALCIO</title>
+<link rel="stylesheet" href="style.css">
+<style>
+body {
+    background-color: #d9f0d6;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 600px;
+    margin: 100px auto;
+    padding: 20px;
+    background: #fff;
+    border: 2px solid #f1c40f;
+    border-radius: 12px;
+    text-align: center;
+}
+
+.container h2 {
+    color: #2ecc71;
+}
+
+.container p {
+    font-size: 16px;
+    margin: 10px 0;
+}
+
+.footer {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #555;
+}
+
+.btn-nav {
+    background-color: #2ecc71;
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    margin: 10px 5px 0 5px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: background 0.3s;
+}
+
+.btn-nav:hover {
+    background-color: #27ae60;
+}
+</style>
+</head>
+<body>
+
+<!-- Logo -->
+<img src="logo.png" alt="Logo FIESOLE CALCIO" class="logo" style="display:block; margin: 40px auto 20px auto; max-width:200px;">
+
+<div class="container">
+    <h2>Informazioni</h2>
+    <p>Sito per creare e scaricare la convocazione settimanale.</p>
+    <p>&copy; 2025 Fiesole Calcio. Tutti i diritti riservati.</p>
+    <p><strong>Versione Beta 1.0</strong></p>
+    
+    <button class="btn-nav" id="btnHome">Torna alla Home</button>
+</div>
+
+<script>
+document.getElementById('btnHome').addEventListener('click', () => {
+    window.location.href = 'index.html';
+});
+</script>
+
+</body>
+</html>

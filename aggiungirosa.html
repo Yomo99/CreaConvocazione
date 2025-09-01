@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aggiungi Rosa - FIESOLE CALCIO</title>
+<link rel="stylesheet" href="style.css">
+<style>
+body {
+    background-color: #d9f0d6;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    margin-top: 100px;
+    text-align: center;
+}
+
+.box-upload {
+    max-width: 500px;
+    margin: 20px auto;
+    padding: 15px;
+    border: 2px solid #f1c40f; /* linea continua */
+    border-radius: 10px;
+    transition: border 0.3s ease-in-out;
+    text-align: center;
+    background: #fff;
+}
+
+.box-upload.salvato {
+    border-color: #2ecc71;
+}
+
+#anteprima table {
+    margin: 10px auto;
+    border-collapse: collapse;
+}
+
+#anteprima th, #anteprima td {
+    border: 1px solid #ccc;
+    padding: 6px 12px;
+    text-align: center;
+}
+
+/* Bottone file carino */
+#fileInput {
+    display: none;
+}
+
+.label-file {
+    display: inline-block;
+    background-color: #3498db;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    transition: background 0.3s;
+}
+
+.label-file:hover {
+    background-color: #2980b9;
+}
+
+/* Pulsanti navigazione */
+.btn-nav, .btn-salva {
+    background-color: #2ecc71;
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    margin: 5px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: background 0.3s;
+}
+
+.btn-nav:hover, .btn-salva:hover {
+    background-color: #27ae60;
+}
+</style>
+</head>
+<body>
+
+<img src="logo.png" alt="Logo FIESOLE CALCIO" class="logo">
+
+<div class="container">
+    <h2>Carica la rosa della squadra</h2>
+
+    <!-- Bottone file -->
+    <label for="fileInput" class="label-file">Scegli File</label>
+    <input type="file" id="fileInput" accept=".txt">
+    
+    <!-- Anteprima tabella -->
+    <div id="anteprima" class="box-upload">
+        Nessun file caricato
+    </div>
+
+    <!-- Pulsanti -->
+    <div style="margin-top:20px;">
+        <button class="btn-nav" id="indietroBtn">INDIETRO</button>
+        <button class="btn-salva" id="salvaBtn">SALVA</button>
+        <button class="btn-nav" id="avantiBtn">AVANTI</button>
+    </div>
+</div>
+
+<script>
+const fileInput = document.getElementById('fileInput');
+const anteprima = document.getElementById('anteprima');
+const salvaBtn = document.getElementById('salvaBtn');
+
+let giocatori = [];
+
+// Carica file e crea anteprima
+fileInput.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = function(evt){
+        const contenuto = evt.target.result;
+        const righe = contenuto.split('\n').filter(r => r.trim() !== '');
+        giocatori = righe.map(r => {
+            const parti = r.split(',');
+            return {cognome: parti[0], nome: parti[1], ruolo: parti[2], convocato: true};
+        });
+
+        let html = '<table><tr><th>Cognome</th><th>Nome</th><th>Ruolo</th></tr>';
+        giocatori.forEach(g => {
+            html += `<tr><td>${g.cognome}</td><td>${g.nome}</td><td>${g.ruolo}</td></tr>`;
+        });
+        html += '</table>';
+        anteprima.innerHTML = html;
+        anteprima.classList.remove('salvato');
+        anteprima.style.borderColor = '#f1c40f';
+    };
+    reader.readAsText(file);
+});
+
+// Salva in localStorage
+salvaBtn.addEventListener('click', () => {
+    if(giocatori.length === 0) {
+        alert('Nessun file da salvare!');
+        return;
+    }
+    localStorage.setItem('giocatoriRosa', JSON.stringify(giocatori));
+    anteprima.classList.add('salvato');
+    anteprima.style.borderColor = '#2ecc71';
+    alert('Rosa salvata correttamente!');
+});
+
+// Navigazione
+document.getElementById('avantiBtn').addEventListener('click', () => {
+    if(giocatori.length === 0) {
+        alert('Salva la rosa prima di andare avanti!');
+        return;
+    }
+    window.location.href = 'creaconvocazione.html';
+});
+
+document.getElementById('indietroBtn').addEventListener('click', () => {
+    window.location.href = 'index.html';
+});
+</script>
+
+</body>
+</html>

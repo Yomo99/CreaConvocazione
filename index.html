@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FIESOLE CALCIO - Home</title>
+<link rel="stylesheet" href="style.css">
+<style>
+body {
+    background-color: #d9f0d6;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.index-logo {
+    display: block;
+    margin: 40px auto 20px auto;
+    max-width: 200px;
+}
+
+.container {
+    max-width: 400px;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: #fff;
+    border: 2px solid #f1c40f;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Pulsanti */
+button {
+    display: block;
+    width: 80%;
+    margin: 15px auto;
+    padding: 12px 0;
+    font-size: 16px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s;
+    color: white;
+}
+
+.btn-verde { background-color: #2ecc71; }
+.btn-verde:hover { background-color: #27ae60; }
+
+.btn-giallo { background-color: #f1c40f; color: #000; }
+.btn-giallo:hover { background-color: #d4ac0d; }
+
+.btn-disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* Bottone esterno Gestore Presenze */
+#btnGestore {
+    width: 220px;
+    margin: 20px auto;
+    display: block;
+}
+</style>
+</head>
+<body>
+
+<!-- Logo -->
+<img src="logo.png" alt="Logo FIESOLE CALCIO" class="index-logo">
+
+<!-- Container principale -->
+<div class="container">
+    <button class="btn-verde" id="btnAggiungi">AGGIUNGI CONVOCAZIONE</button>
+    <button class="btn-verde btn-disabled" id="btnScarica" disabled>SCARICA CONVOCAZIONE</button>
+    <button class="btn-giallo" id="btnInfo">INFORMAZIONI</button>
+</div>
+
+<!-- Bottone esterno per Gestore Presenze -->
+<button class="btn-verde" id="btnGestore">VAI AL GESTORE PRESENZE</button>
+
+<script>
+function aggiornaScarica() {
+    const btnScarica = document.getElementById('btnScarica');
+    const dati = localStorage.getItem('convocazioneSalvata');
+    if(dati && dati !== '{}') {
+        btnScarica.disabled = false;
+        btnScarica.classList.remove('btn-disabled');
+    } else {
+        btnScarica.disabled = true;
+        btnScarica.classList.add('btn-disabled');
+    }
+}
+
+aggiornaScarica();
+
+// Event listeners
+document.getElementById('btnAggiungi').addEventListener('click', () => {
+    window.location.href = 'aggiungirosa.html';
+});
+
+document.getElementById('btnScarica').addEventListener('click', () => {
+    window.location.href = 'scarica.html';
+});
+
+document.getElementById('btnInfo').addEventListener('click', () => {
+    window.location.href = 'info.html';
+});
+
+document.getElementById('btnGestore').addEventListener('click', () => {
+    window.open('https://yomo99.github.io/GestorePresenze/', '_blank');
+});
+
+// Aggiorna stato pulsante quando ritorni sulla pagina
+window.addEventListener('focus', aggiornaScarica);
+</script>
+
+</body>
+</html>

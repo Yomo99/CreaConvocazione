@@ -1,0 +1,153 @@
+/* ======== GENERALI ======== */
+body {
+    font-family: Arial, sans-serif;
+    background: #f5f5f5;
+    margin: 0;
+    padding: 0;
+    color: #333;
+    text-align: center;
+}
+
+h1, h2 {
+    color: #2b2b2b;
+}
+
+/* ======== LOGO ======== */
+.logo {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 80px;
+    height: auto;
+}
+
+.index-logo {
+    position: relative;
+    margin: 20px auto;
+    display: block;
+    width: 120px;
+}
+
+/* ======== CONTAINER ======== */
+.container {
+    max-width: 800px;
+    margin: 80px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* ======== PULSANTI ======== */
+button {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    margin: 10px;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out, background 0.3s;
+}
+
+button:hover {
+    transform: scale(1.08);
+}
+
+/* Verde (azioni principali) */
+.btn-verde {
+    background: #2ecc71;
+    color: white;
+}
+
+.btn-verde:hover {
+    background: #27ae60;
+}
+
+/* Giallo (informazioni) */
+.btn-giallo {
+    background: #f1c40f;
+    color: #333;
+}
+
+.btn-giallo:hover {
+    background: #d4ac0d;
+}
+
+/* Pulsante disabilitato */
+button:disabled {
+    background: #bdc3c7;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* ======== CONTORNO DINAMICO (SALVA) ======== */
+.box-upload {
+    border: 3px dashed #f1c40f;
+    padding: 15px;
+    border-radius: 10px;
+    margin: 20px auto;
+    max-width: 500px;
+    transition: border 0.3s ease-in-out;
+}
+
+.box-upload.salvato {
+    border: 3px solid #2ecc71;
+}
+
+/* ======== TABELLA ======== */
+table {
+    margin: 20px auto;
+    border-collapse: collapse;
+    width: auto;
+}
+
+th, td {
+    border: 1px solid #ccc;
+    padding: 8px 12px;
+    text-align: center;
+}
+
+th {
+    background: #2ecc71;
+    color: white;
+}
+
+td {
+    background: #fafafa;
+}
+
+/* ======== BOTTONI PAGINA ======== */
+.btn-salva {
+    background: #3498db;
+    color: white;
+    padding: 12px 20px;
+    margin-top: 15px;
+}
+
+.btn-salva:hover {
+    background: #2980b9;
+}
+
+.btn-nav {
+    background: #2ecc71;
+    color: white;
+    margin: 10px;
+    padding: 12px 25px;
+}
+
+.btn-nav:hover {
+    background: #27ae60;
+}
+
+/* ======== RIEPILOGO ======== */
+.riepilogo {
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px auto;
+    text-align: left;
+    max-width: 600px;
+    font-size: 16px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+}

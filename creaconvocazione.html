@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crea Convocazione - FIESOLE CALCIO</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<style>
+body { background-color: #d9f0d6; font-family: Arial, sans-serif; }
+.container { margin-top: 80px; }
+#convocazioneBox { background: #fff; max-width: 700px; margin: 0 auto; padding: 20px; border: 3px solid #f1c40f; border-radius: 12px; transition: border 0.3s; }
+#convocazioneBox.salvato { border-color: #2ecc71; }
+input[type="time"], input[type="text"], select { padding: 6px; border-radius: 6px; border: 1px solid #ccc; margin-bottom: 10px; width: 200px; }
+.data-wrapper { display: block; padding:12px; border:1px solid #ccc; border-radius:8px; background-color:#f9f9f9; margin-bottom:15px; }
+#giocatoriTable { margin: 20px auto; border-collapse: collapse; width: 100%; }
+#giocatoriTable th, #giocatoriTable td { border: 1px solid #ccc; padding: 8px 12px; text-align: center; }
+#giocatoriTable th { background-color: #f1c40f; color: #fff; }
+#salvaBtn { background: #3498db; color: white; padding: 10px 20px; margin-top: 15px; border-radius: 8px; cursor: pointer; }
+#salvaBtn:hover { background: #2980b9; }
+.btn-nav { background: #2ecc71; color: white; padding: 10px 25px; margin: 10px; border-radius: 8px; cursor: pointer; }
+.btn-nav:hover { background: #27ae60; }
+#resetFlagBtn { background:#e74c3c; color:white; border:none; border-radius:5px; cursor:pointer; font-size:12px; padding:5px 10px; }
+#resetFlagBtn:hover { background:#c0392b; }
+.flatpickr-calendar { font-size: 14px; }
+.flatpickr-day.weekend { background-color: #fffae6; font-weight: bold; border-radius: 50%; }
+</style>
+</head>
+<body>
+<img src="logo.png" alt="Logo FIESOLE CALCIO" class="logo">
+<div class="container">
+    <h2>Crea Convocazione</h2>
+    <div id="convocazioneBox">
+        <div class="data-wrapper">
+            <label for="dataConv" style="font-weight:bold; font-size:16px;">Data Partita:</label><br>
+            <input type="text" id="dataConv" placeholder="Seleziona la data">
+        </div>
+        <label>Orario convocazione:</label><br>
+        <input type="time" id="orarioConv"><br>
+        <label>Orario partita:</label><br>
+        <input type="time" id="orarioPart"><br>
+        <label>Luogo:</label><br>
+        <select id="luogoSelect">
+            <option value="IN CASA">IN CASA</option>
+            <option value="OSPITI">OSPITI</option>
+        </select><br>
+        <label>Indirizzo:</label><br>
+        <input type="text" id="indirizzo" value="Via di Bugia, Fiesole FI"><br>
+        <label>Squadra avversaria:</label><br>
+        <input type="text" id="squadraAvversaria"><br>
+
+        <div id="giocatoriDiv"></div>
+
+        <div style="text-align:right; margin-top:5px;">
+            <button id="resetFlagBtn">Reset Convocazioni</button>
+        </div>
+
+        <button id="salvaBtn">SALVA</button>
+    </div>
+
+    <div style="text-align:center; margin-top:20px;">
+        <button class="btn-nav" id="indietroBtn">INDIETRO</button>
+        <button class="btn-nav" id="avantiBtn">AVANTI</button>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/it.js"></script>
+<script>
+const giocatori = JSON.parse(localStorage.getItem('giocatoriRosa') || '[]');
+const giocatoriDiv = document.getElementById('giocatoriDiv');
+
+function mostraTabella() {
+    if(giocatori.length === 0){
+        giocatoriDiv.innerHTML = 'Nessun giocatore disponibile.';
+        return;
+    }
+    let html = '<table id="giocatoriTable"><tr><th>Convocato</th><th>Nome</th><th>Cognome</th><th>Ruolo</th></tr>';
+    giocatori.forEach((g, i) => {
+        g.convocato = g.convocato || false;
+        html += `<tr>
+            <td><input type="checkbox" data-index="${i}" ${g.convocato ? 'checked' : ''}></td>
+            <td>${g.nome}</td>
+            <td>${g.cognome}</td>
+            <td>${g.ruolo || ''}</td>
+        </tr>`;
+    });
+    html += '</table>';
+    giocatoriDiv.innerHTML = html;
+}
+mostraTabella();
+
+const luogoSelect = document.getElementById('luogoSelect');
+const indirizzo = document.getElementById('indirizzo');
+luogoSelect.addEventListener('change', (e) => {
+    if(e.target.value === 'IN CASA'){
+        indirizzo.value = 'Via di Bugia, Fiesole FI';
+        indirizzo.readOnly = true;
+    } else {
+        indirizzo.value = '';
+        indirizzo.readOnly = false;
+    }
+});
+
+giocatoriDiv.addEventListener('change', (e) => {
+    if(e.target.type === 'checkbox') {
+        const index = e.target.dataset.index;
+        giocatori[index].convocato = e.target.checked;
+    }
+});
+
+document.getElementById('salvaBtn').addEventListener('click', () => {
+    const data = document.getElementById('dataConv').value;
+    const orarioConv = document.getElementById('orarioConv').value;
+    const orarioPart = document.getElementById('orarioPart').value;
+    const luogo = luogoSelect.value;
+    const squadraAvv = document.getElementById('squadraAvversaria').value;
+    const indirizzoVal = indirizzo.value;
+
+    if(!data || !orarioConv || !orarioPart || !indirizzoVal || !squadraAvv){
+        alert('Compila tutti i campi!');
+        return;
+    }
+
+    document.querySelectorAll('#giocatoriTable input[type="checkbox"]').forEach(cb => {
+        const index = cb.dataset.index;
+        giocatori[index].convocato = cb.checked;
+    });
+
+    const convocazione = {data, orarioConv, orarioPart, luogo, viaCampo: indirizzoVal, squadraAvversaria: squadraAvv, giocatori};
+    localStorage.setItem('convocazioneSalvata', JSON.stringify(convocazione));
+    document.getElementById('convocazioneBox').classList.add('salvato');
+    alert('Convocazione salvata!');
+});
+
+document.getElementById('resetFlagBtn').addEventListener('click', () => {
+    giocatori.forEach(g => g.convocato = false);
+    mostraTabella();
+});
+
+document.getElementById('avantiBtn').addEventListener('click', () => {
+    window.location.href = 'revisioneindex.html';
+});
+document.getElementById('indietroBtn').addEventListener('click', () => {
+    window.location.href = 'aggiungirosa.html';
+});
+
+flatpickr("#dataConv", {
+    "locale": "it",
+    minDate: "today",
+    onDayCreate: function(dObj, dStr, fp, dayElem){
+        const day = dayElem.dateObj.getDay();
+        if(day === 0 || day === 6) dayElem.classList.add('weekend');
+    }
+});
+</script>
+</body>
+</html>
