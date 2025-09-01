@@ -81,8 +81,8 @@ function mostraTabella() {
         g.convocato = g.convocato || false;
         html += `<tr>
             <td><input type="checkbox" data-index="${i}" ${g.convocato ? 'checked' : ''}></td>
-            <td>${g.cognome}</td>
             <td>${g.nome}</td>
+            <td>${g.cognome}</td>
             <td>${g.ruolo || ''}</td>
         </tr>`;
     });
