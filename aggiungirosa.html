@@ -126,7 +126,7 @@ fileInput.addEventListener('change', (e) => {
 
         let html = '<table><tr><th>Cognome</th><th>Nome</th><th>Ruolo</th></tr>';
         giocatori.forEach(g => {
-            html += `<tr><td>${g.cognome}</td><td>${g.nome}</td><td>${g.ruolo}</td></tr>`;
+            html += `<tr><td>${g.nome}</td><td>${g.cognome}</td><td>${g.ruolo}</td></tr>`;
         });
         html += '</table>';
         anteprima.innerHTML = html;
