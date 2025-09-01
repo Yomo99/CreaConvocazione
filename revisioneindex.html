@@ -120,7 +120,7 @@ if(convocazione.giocatori && convocazione.giocatori.length > 0){
     if(convocati.length > 0){
         convocati.forEach(g => {
             const tr = document.createElement('tr');
-            tr.innerHTML = `<td>✔️</td><td>${g.nome}</td><td>${g.cognome}</td><td>${g.ruolo || ''}</td>`;
+            tr.innerHTML = `<td>✔️</td><td>${g.cognome}</td><td>${g.nome}</td><td>${g.ruolo || ''}</td>`;
             tbody.appendChild(tr);
         });
     } else {
