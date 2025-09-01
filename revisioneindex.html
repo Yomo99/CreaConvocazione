@@ -98,9 +98,16 @@ button:hover {
 </div>
 
 <script>
+function formattaDataIt(data) {
+    if (!data) return '';
+    const d = new Date(data);
+    if (isNaN(d)) return data;
+    return d.toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit', year: 'numeric' });
+}
+
 const convocazione = JSON.parse(localStorage.getItem('convocazioneSalvata') || '{}');
 
-document.getElementById('dataConv').textContent = convocazione.data || '';
+document.getElementById('dataConv').textContent = formattaDataIt(convocazione.data);
 document.getElementById('orarioConv').textContent = convocazione.orarioConv || '';
 document.getElementById('orarioPart').textContent = convocazione.orarioPart || '';
 document.getElementById('luogo').textContent = convocazione.luogo || '';
