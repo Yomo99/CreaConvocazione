@@ -24,6 +24,7 @@ input[type="time"], input[type="text"], select { padding: 6px; border-radius: 6p
 #resetFlagBtn:hover { background:#c0392b; }
 .flatpickr-calendar { font-size: 14px; }
 .flatpickr-day.weekend { background-color: #fffae6; font-weight: bold; border-radius: 50%; }
+.logo { display: block; margin: 20px auto; max-width: 200px; }
 </style>
 </head>
 <body>
@@ -75,13 +76,13 @@ function mostraTabella() {
         giocatoriDiv.innerHTML = 'Nessun giocatore disponibile.';
         return;
     }
-    let html = '<table id="giocatoriTable"><tr><th>Convocato</th><th>Nome</th><th>Cognome</th><th>Ruolo</th></tr>';
+    let html = '<table id="giocatoriTable"><tr><th>Convocato</th><th>Cognome</th><th>Nome</th><th>Ruolo</th></tr>';
     giocatori.forEach((g, i) => {
         g.convocato = g.convocato || false;
         html += `<tr>
             <td><input type="checkbox" data-index="${i}" ${g.convocato ? 'checked' : ''}></td>
-            <td>${g.nome}</td>
             <td>${g.cognome}</td>
+            <td>${g.nome}</td>
             <td>${g.ruolo || ''}</td>
         </tr>`;
     });
@@ -146,7 +147,8 @@ document.getElementById('indietroBtn').addEventListener('click', () => {
 });
 
 flatpickr("#dataConv", {
-    "locale": "it",
+    locale: "it",
+    dateFormat: "d/m/Y",
     minDate: "today",
     onDayCreate: function(dObj, dStr, fp, dayElem){
         const day = dayElem.dateObj.getDay();
